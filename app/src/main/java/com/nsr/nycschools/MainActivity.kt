@@ -3,7 +3,6 @@ package com.nsr.nycschools
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -34,19 +33,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
-import com.nsr.nycschools.network.ApiHelper
-import com.nsr.nycschools.network.NYCAPIClient
 import com.nsr.nycschools.viewmodel.NycSchoolsUiModel
-import com.nsr.nycschools.viewmodel.NycViewModelFactory
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: NycSchoolsViewModel by viewModels { NycViewModelFactory(ApiHelper(NYCAPIClient.apiService)) }
-
+   private val viewModel: NycSchoolsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //viewModel = ViewModelProvider(this)[NycSchoolsViewModel::class.java]
         setContent {
             NYCSchoolsTheme {
                 // A surface container using the 'background' color from the theme
@@ -66,7 +61,6 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ShowSchoolsList(
-    modifier: Modifier = Modifier,
     viewModel: NycSchoolsViewModel
 ) {
     val schoolItems by viewModel.nycSchoolsList.collectAsState()
