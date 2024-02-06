@@ -38,7 +38,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
-import com.nsr.nycschools.network.ResponseResource
 import com.nsr.nycschools.network.Status
 import com.nsr.nycschools.viewmodel.NycSchoolsUiModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -130,18 +129,17 @@ fun SchoolItem(item: NycSchoolsUiModel, modifier: Modifier = Modifier) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
     Column(Modifier
-        .padding(all = 16.dp)
         .fillMaxWidth()
         .clickable {
             expanded = !expanded
         }
         .animateContentSize(
             animationSpec = spring(
-                dampingRatio = Spring.DampingRatioLowBouncy,
+                dampingRatio = Spring.DampingRatioNoBouncy,
                 stiffness = Spring.StiffnessLow
             )
         )
-        ,
+        .padding(all = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
 
     ) {
