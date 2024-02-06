@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.nsr.nycschools.ui.theme.NYCSchoolsTheme
 import com.nsr.nycschools.viewmodel.NycSchoolsViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -44,7 +45,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
-   private val viewModel: NycSchoolsViewModel by viewModel()
+    private val viewModel: NycSchoolsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +92,18 @@ private fun ShowSchoolsList(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(stringResource(R.string.error_message))
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(stringResource(R.string.error_message))
+                    Button(onClick = {
+                        viewModel.fetchNycSchoolsList()
+                    }
+                    ) {
+                        Text(stringResource(R.string.retry))
+                    }
+                }
             }
         }
     }

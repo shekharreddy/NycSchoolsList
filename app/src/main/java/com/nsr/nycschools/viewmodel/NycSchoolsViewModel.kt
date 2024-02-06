@@ -9,7 +9,6 @@ import com.nsr.nycschools.network.ApiHelper
 import com.nsr.nycschools.network.ResponseResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
@@ -24,7 +23,7 @@ class NycSchoolsViewModel(private val apiHelper: ApiHelper): ViewModel() {
         fetchNycSchoolsList()
     }
 
-    private fun fetchNycSchoolsList() {
+    fun fetchNycSchoolsList() {
         _nycSchoolsList.value = ResponseResource.loading()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
