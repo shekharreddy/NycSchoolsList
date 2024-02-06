@@ -1,28 +1,31 @@
 package com.nsr.nycschools.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nsr.nycschools.R
 import com.nsr.nycschools.model.NycSchoolsResponse
 import com.nsr.nycschools.network.ApiHelper
+import com.nsr.nycschools.network.ResponseResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class NycSchoolsViewModel(private val apiHelper: ApiHelper): ViewModel() {
 
-    private var _nycSchoolsList = MutableStateFlow(listOf(NycSchoolsUiModel()))
-    val nycSchoolsList: MutableStateFlow<List<NycSchoolsUiModel>> get() = _nycSchoolsList
+    private val _nycSchoolsList = MutableStateFlow<ResponseResource<List<NycSchoolsUiModel>>>(
+        ResponseResource.loading())
+    val nycSchoolsList: MutableStateFlow<ResponseResource<List<NycSchoolsUiModel>>> = _nycSchoolsList
 
     init {
         fetchNycSchoolsList()
     }
 
     private fun fetchNycSchoolsList() {
+        _nycSchoolsList.value = ResponseResource.loading()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 try {
@@ -30,7 +33,7 @@ class NycSchoolsViewModel(private val apiHelper: ApiHelper): ViewModel() {
                     processResponse(response)
                 } catch (e: Exception) {
                     Log.e("TAG ", e.message.orEmpty())
-                    _nycSchoolsList.value = emptyList()
+                    _nycSchoolsList.value = ResponseResource.error(R.string.error_message)
                 }
             }
         }
@@ -46,7 +49,7 @@ class NycSchoolsViewModel(private val apiHelper: ApiHelper): ViewModel() {
             )
             )
         }.also {
-            _nycSchoolsList.value = list
+            _nycSchoolsList.value = ResponseResource.success(list)
         }
     }
 

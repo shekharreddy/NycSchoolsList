@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">NYCSchools</string>
     <string name="nyc_schools">NYC Schools</string>
+    <string name="error_message">Please try again later</string>
+
 </resources>
