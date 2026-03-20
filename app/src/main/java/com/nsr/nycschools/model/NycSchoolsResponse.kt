@@ -1,6 +1,8 @@
 package com.nsr.nycschools.model
 
 import androidx.annotation.Keep
+import kotlinx.serialization.Serializable
 
 @Keep
-class NycSchoolsResponse() : ArrayList<NycSchoolsResponseItem>()
+@Serializable
+class NycSchoolsResponse : ArrayList<NycSchoolsResponseItem>()

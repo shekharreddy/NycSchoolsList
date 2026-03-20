@@ -76,14 +76,12 @@ private fun ShowSchoolsList(
             listDataState.value.data?.let { UpdateUI(it) }
         }
         Status.INITIAL_LOADING -> {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.fillMaxSize()
+            Box(modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
-                    modifier = Modifier.width(64.dp),
-                    color = MaterialTheme.colorScheme.secondary,
-                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    // Optional: Specify color or stroke width
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }

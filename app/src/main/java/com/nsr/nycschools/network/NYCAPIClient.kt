@@ -1,29 +1,33 @@
 package com.nsr.nycschools.network
 
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 
 object NYCAPIClient {
 
     private const val BASE_URL = "https://data.cityofnewyork.us/"
 
-    private val mHttpLoggingInterceptor = HttpLoggingInterceptor()
-        .setLevel(HttpLoggingInterceptor.Level.BODY)
-
-    private val mOkHttpClient = OkHttpClient
-        .Builder()
-        .addInterceptor(mHttpLoggingInterceptor)
-        .build()
-
-    private fun getRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(mOkHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build() //Doesn't require the adapter
+    val httpClient = HttpClient(Android) {
+        install(ContentNegotiation) {
+            json(Json {
+                prettyPrint = true
+                isLenient = true
+                ignoreUnknownKeys = true
+            })
+        }
+        install(Logging) {
+            level = LogLevel.BODY
+        }
+        defaultRequest {
+            url(BASE_URL)
+        }
     }
 
-    val apiService: NYCApiService = getRetrofit().create(NYCApiService::class.java)
+    const val NYC_SCHOOLS_ENDPOINT = "resource/s3k6-pzi2.json"
 }
